@@ -1,7 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../screens/profile.dart';
 class Post extends StatelessWidget {
-  Post({super.key});
+  Post({Key?key,this.postData,}):super(key:key);
+  final postData;
 
   @override
   Widget build(BuildContext context) {
@@ -9,7 +12,7 @@ class Post extends StatelessWidget {
       padding: EdgeInsets.all(30),
       child: Column(
         children: [
-          Image.asset("assets/demo.jpg",width: 300,),
+         Image.network(postData['image']),
           Container(
             constraints: BoxConstraints(maxWidth: 600),
             padding: EdgeInsets.all(20),
@@ -17,8 +20,15 @@ class Post extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("likes 30"),
-                Text("john kim"),
+                Text("likes ${postData['likes'].toString()}"),
+                GestureDetector(
+                  child: Text(postData['user']),
+                  onTap: (){
+                    Navigator.push(context,
+                      CupertinoPageRoute(builder:(c)=>Profile())
+                    );
+                  },
+                ),
                 Text("content.........."),
               ],
             ),

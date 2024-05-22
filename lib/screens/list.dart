@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 import '../widgets/post.dart';
-import '../service/store.dart';
-import '../service/postservice.dart' as post_service;
+import 'dart:convert';
 class List extends StatefulWidget {
   List({super.key});
 
@@ -16,23 +16,30 @@ class _ListState extends State<List> {
   changeFetching(){
     fetching = !fetching;
   }
+  getList() async {
+    var response = await http.get(Uri.parse("https://codingapple1.github.io/app/data.json"));
+    if (response.statusCode==200){
+      setState(() {
+        postData = jsonDecode(response.body);
+      });
+    }
+  }
   @override
   void initState() {
     super.initState();
     changeFetching();
     if(fetching){
-      setState(() {
-        postData = post_service.getList();
-      });
+      getList();
       changeFetching();
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-        itemCount: 1,
+        itemCount: postData.length,
         itemBuilder: (c,i){
-          return Post();
+          return postData.isEmpty ? Container() : Post(postData:postData[i]);
         });
   }
 }

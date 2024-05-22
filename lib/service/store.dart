@@ -14,4 +14,21 @@ class Store extends ChangeNotifier {
       notifyListeners();
     }
   }
+  
+  var userPosts = [];
+
+  getData() async {
+    try {
+      var response = await http.get(Uri.parse('https://codingapple1.github.io/app/profile.json'));
+      if (response.statusCode==200){
+        var result = jsonDecode(response.body);
+        userPosts = result;
+        notifyListeners();
+      }
+    }catch(e){
+      print("데이터 가져 오기 실패함");
+    }
+  }
+  
+  
 }
